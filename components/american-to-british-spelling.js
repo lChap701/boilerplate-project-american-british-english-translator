@@ -1,3 +1,8 @@
+/**
+ * Module that contains all British spellings of American words
+ * @module ./components/american-to-british-spellings
+ *
+ */
 module.exports = {
   accessorize: "accessorise",
   accessorized: "accessorised",

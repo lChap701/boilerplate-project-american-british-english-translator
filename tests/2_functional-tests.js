@@ -7,4 +7,6 @@ chai.use(chaiHttp);
 
 let Translator = require("../components/translator.js");
 
-suite("Functional Tests", () => {});
+suite("Functional Tests", () => {
+  /* My tests */
+});

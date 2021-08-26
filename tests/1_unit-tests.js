@@ -3,4 +3,6 @@ const assert = chai.assert;
 
 const Translator = require("../components/translator.js");
 
-suite("Unit Tests", () => {});
+suite("Unit Tests", () => {
+  /* My tests */
+});

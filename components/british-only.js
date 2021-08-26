@@ -1,3 +1,8 @@
+/**
+ * Module that contains all British only words
+ * @module ./components/british-only
+ *
+ */
 module.exports = {
   abseil: "rappel",
   accountancy: "accounting",

@@ -1,3 +1,8 @@
+/**
+ * Module that contains all American only words
+ * @module ./components/american-only
+ *
+ */
 module.exports = {
   acclimate: "acclimatise",
   acetaminophen: "paracetamol",
