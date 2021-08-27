@@ -1,5 +1,5 @@
 /**
- * Module that contains all American only words
+ * Module that contains all British versions of American only words
  * @module ./components/american-only
  *
  */
