@@ -91,12 +91,7 @@ class Translator {
     // Translates American English only words
     for (const [key, word] of Object.entries(britishOnly)) {
       let regex = new RegExp(key, "g");
-      /* let cnt = this.duplicateValueCheck(word, britishOnly);
-
-      if (cnt > 1) {
-        console.log(word + ": " + cnt);
-      } */
-
+   
       if (
         american.toLowerCase().match(regex) &&
         this.notTranslated(word, translations)
@@ -155,15 +150,6 @@ class Translator {
     }
 
     return true;
-  }
-
-  duplicateValueCheck(value, obj) {
-    let values = Object.values(obj);
-    let dupsCnt = values.reduce((dups, o2) => {
-      if (value == o2) ++dups;
-      return dups;
-    }, 0);
-    return dupsCnt;
   }
 
   /**
