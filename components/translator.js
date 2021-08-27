@@ -205,11 +205,8 @@ class Translator {
    * @returns Returns the censored sentence
    */
   cleanCurseWords(sentence) {
-    let cleaned = sentence;
-
-    if (cursing.isProfane(sentence)) cleaned = cursing.clean(sentence);
-
-    return cleaned;
+    if (cursing.isProfane(sentence)) return cursing.clean(sentence);
+    return sentence;
   }
 }
 
