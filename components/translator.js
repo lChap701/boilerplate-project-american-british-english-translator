@@ -5,7 +5,7 @@ const britishOnly = require("./british-only.js");
 
 const badWords = require("bad-words");
 let cursing = new badWords();
-cursing.removeWords("ass", "Nazi", "Nazis", "dick");
+cursing.removeWords("ass", "Nazi", "Nazis", "dick", "fanny");
 
 /**
  * Module that translates American and British words
@@ -22,7 +22,11 @@ class Translator {
   inBritish(sentence) {
     let british = sentence;
 
-    if (british.match(/\d+:\d+/)) british = british.replace(/:/g, ".");
+    if (british.match(/\d{1,2}:\d{2}/)) {
+      let match = british.match(/\d{1,2}:\d{2}/)[0];
+      let newVal = match.replace(/:/, ".");
+      british = british.replace(new RegExp(match, "g"), newVal);
+    }
 
     // Translates American English only words
     for (const [key, word] of Object.entries(americanOnly)) {
@@ -78,7 +82,11 @@ class Translator {
     let american = sentence;
     let translations = [];
 
-    if (american.match(/\d+\.\d+/)) american = american.replace(/\./g, ":");
+    if (american.match(/\d{1,2}\.\d{2}/)) {
+      let match = american.match(/\d{1,2}\.\d{2}/)[0];
+      let newVal = match.replace(/\./, ":");
+      american = american.replace(new RegExp(match, "g"), newVal);
+    }
 
     // Translates American English only words
     for (const [key, word] of Object.entries(britishOnly)) {
@@ -168,15 +176,15 @@ class Translator {
    * @returns Returns a new sentence
    */
   checkCasing(sentence, word, change, replacement) {
-    if (word[0] == word[0].toUpperCase()) {
-      let old = change[0].toUpperCase() + change.slice(1);
-      let ne = replacement[0].toUpperCase() + replacement.slice(1);
-      return sentence.replace(new RegExp(old, "g"), ne);
-    }
-
     if (word == word.toUpperCase()) {
       let old = change.toUpperCase();
       let ne = replacement.toUpperCase();
+      return sentence.replace(new RegExp(old, "g"), ne);
+    }
+
+    if (word[0] == word[0].toUpperCase()) {
+      let old = change[0].toUpperCase() + change.slice(1);
+      let ne = replacement[0].toUpperCase() + replacement.slice(1);
       return sentence.replace(new RegExp(old, "g"), ne);
     }
 
