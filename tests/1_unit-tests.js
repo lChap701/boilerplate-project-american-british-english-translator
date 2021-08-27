@@ -5,7 +5,7 @@ const Translator = require("../components/translator.js");
 
 suite("Unit Tests", () => {
   /* My tests */
-  suite("American to British Tests", () => {
+  suite("American English to British English Tests", () => {
     test("1)   Mangoes are my favorite fruit.", () => {
       let translated = Translator.prototype.inBritish(
         "Mangoes are my favorite fruit."
@@ -123,6 +123,68 @@ suite("Unit Tests", () => {
         translated,
         "Lunch is at 12.15 today.",
         `'Lunch is at 12.15 today.' should be returned, not '${translated}'`
+      );
+    });
+  });
+
+  suite("British English to American English Tests", () => {
+    test("1)   We watched the footie match for a while.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "We watched the footie match for a while."
+      );
+
+      assert.equal(
+        translated,
+        "We watched the soccer match for a while.",
+        `'We watched the soccer match for a while.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("2)   Paracetamol takes up to an hour to work.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "Paracetamol takes up to an hour to work."
+      );
+
+      assert.equal(
+        translated,
+        "Tylenol takes up to an hour to work.",
+        `'Tylenol takes up to an hour to work.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("3)   First, caramelise the onions.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "First, caramelise the onions."
+      );
+
+      assert.equal(
+        translated,
+        "First, caramelize the onions.",
+        `'First, caramelize the onions.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("4)   I spent the bank holiday at the funfair.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "I spent the bank holiday at the funfair."
+      );
+
+      assert.equal(
+        translated,
+        "I spent the public holiday at the carnival.",
+        `'I spent the public holiday at the carnival.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("5)   I had a bicky then went to the chippy.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "I had a bicky then went to the chippy."
+      );
+
+      assert.equal(
+        translated,
+        "I had a cookie then went to the fish-and-chip shop.",
+        `'I had a cookie then went to the fish-and-chip shop.' should be returned, not '${translated}'`
       );
     });
   });
