@@ -187,5 +187,65 @@ suite("Unit Tests", () => {
         `'I had a cookie then went to the fish-and-chip shop.' should be returned, not '${translated}'`
       );
     });
+
+    test("6)   I've just got bits and bobs in my bum bag.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "I've just got bits and bobs in my bum bag."
+      );
+
+      assert.equal(
+        translated,
+        "I've just got odds and ends in my fanny pack.",
+        `'I've just got odds and ends in my fanny pack.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("7)   The car boot sale at Boxted Airfield was called off.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "The car boot sale at Boxted Airfield was called off."
+      );
+
+      assert.equal(
+        translated,
+        "The swap meet at Boxted Airfield was called off.",
+        `'The swap meet at Boxted Airfield was called off.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("8)   Have you met Mrs Kalyani?", () => {
+      let translated = Translator.prototype.inAmerican(
+        "Have you met Mrs Kalyani?"
+      );
+
+      assert.equal(
+        translated,
+        "Have you met Mrs. Kalyani?",
+        `'Have you met Mrs. Kalyani?' should be returned, not '${translated}'`
+      );
+    });
+
+    test("9)   Have you met Mrs Kalyani?", () => {
+      let translated = Translator.prototype.inAmerican(
+        "Prof Joyner of King's College, London."
+      );
+
+      assert.equal(
+        translated,
+        "Prof. Joyner of King's College, London.",
+        `'Prof. Joyner of King's College, London.' should be returned, not '${translated}'`
+      );
+    });
+
+    test("10)  Tea time is usually around 4 or 4.30.", () => {
+      let translated = Translator.prototype.inAmerican(
+        "Tea time is usually around 4 or 4.30."
+      );
+
+      assert.equal(
+        translated,
+        "Tea time is usually around 4 or 4:30.",
+        `'Tea time is usually around 4 or 4:30.' should be returned, not '${translated}'`
+      );
+    });
   });
 });
