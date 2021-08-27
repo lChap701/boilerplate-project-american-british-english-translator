@@ -28,7 +28,7 @@ class Translator {
       british = british.replace(new RegExp(match, "g"), newVal);
     }
 
-    // Translates American English only words
+    // Translates American English words to British English
     for (const [key, word] of Object.entries(americanOnly)) {
       let regex = new RegExp(key, "g");
 
@@ -88,10 +88,10 @@ class Translator {
       american = american.replace(new RegExp(match, "g"), newVal);
     }
 
-    // Translates American English only words
+    // Translates British English words to American English
     for (const [key, word] of Object.entries(britishOnly)) {
       let regex = new RegExp(key, "g");
-   
+
       if (
         american.toLowerCase().match(regex) &&
         this.notTranslated(word, translations)
@@ -186,6 +186,69 @@ class Translator {
   cleanCurseWords(sentence) {
     if (cursing.isProfane(sentence)) return cursing.clean(sentence);
     return sentence;
+  }
+
+  /**
+   * Highlights the translated words in a sentence using the <span> element
+   * @param {String} words    Represents the sentence that was translated
+   * @param {String} type     Represents the type of English the sentence is in
+   *
+   * @returns Returns the translated words wrapped in <span> tags
+   */
+  highlighter(words, type = "american-to-british") {
+    let transWords = [];
+
+    if (type == "british-to-american") {
+      // Checks for American versions of British only words
+      for (const [key] of Object.entries(americanOnly)) {
+        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+          transWords.push(key);
+          words = words.replace(new RegExp(key, "g"), "");
+        }
+      }
+
+      // Checks for American spellings of words
+      for (const [key] of Object.entries(americanToBritishSpelling)) {
+        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+          transWords.push(key);
+          words = words.replace(new RegExp(key, "g"), "");
+        }
+      }
+
+      // Checks for American titles
+      for (const [key] of Object.entries(americanToBritishTitles)) {
+        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+          transWords.push(key);
+          words = words.replace(new RegExp(key, "g"), "");
+        }
+      }
+    } else {
+      // Checks for British versions of American only words
+      for (const [key] of Object.entries(britishOnly)) {
+        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+          transWords.push(key);
+          words = words.replace(new RegExp(key, "g"), "");
+        }
+      }
+
+      // Checks for British spellings of words
+      for (const [key] of Object.entries(americanToBritishSpelling)) {
+        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+          transWords.push(key);
+          words = words.replace(new RegExp(key, "g"), "");
+        }
+      }
+
+      // Checks for British titles
+      for (const [key] of Object.entries(americanToBritishTitles)) {
+        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+          transWords.push(key);
+          words = words.replace(new RegExp(key, "g"), "");
+        }
+      }
+    }
+
+    return transWords.map((t) => `<span class="highlight">${t}</span>`);
   }
 }
 
