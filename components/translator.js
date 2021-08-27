@@ -232,18 +232,18 @@ class Translator {
       }
 
       // Checks for British spellings of words
-      for (const [key] of Object.entries(americanToBritishSpelling)) {
-        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
-          transWords.push(key);
-          words = words.replace(new RegExp(key, "g"), "");
+      for (const [key, word] of Object.entries(americanToBritishSpelling)) {
+        if (words.toLowerCase().indexOf(word.toLowerCase() + " ") > -1) {
+          transWords.push(word);
+          words = words.replace(new RegExp(word, "g"), "");
         }
       }
 
       // Checks for British titles
-      for (const [key] of Object.entries(americanToBritishTitles)) {
-        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
-          transWords.push(key);
-          words = words.replace(new RegExp(key, "g"), "");
+      for (const [key, word] of Object.entries(americanToBritishTitles)) {
+        if (words.toLowerCase().indexOf(word.toLowerCase() + " ") > -1) {
+          transWords.push(word);
+          words = words.replace(new RegExp(word, "g"), "");
         }
       }
     }
