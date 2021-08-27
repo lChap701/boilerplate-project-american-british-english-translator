@@ -5,7 +5,7 @@ const britishOnly = require("./british-only.js");
 
 const badWords = require("bad-words");
 let cursing = new badWords();
-cursing.removeWords("ass", "Nazi", "Nazis");
+cursing.removeWords("ass", "Nazi", "Nazis", "dick");
 
 /**
  * Module that translates American and British words
@@ -56,7 +56,9 @@ class Translator {
       }
     }
 
-    return british === sentence ? "Everything looks good to me!" : british;
+    return british === sentence
+      ? "Everything looks good to me!"
+      : this.cleanCurseWords(british);
   }
 
   /**
@@ -75,8 +77,12 @@ class Translator {
    *
    * @returns Returns the censored sentence
    */
-  isCurseWords(sentence) {
-    return;
+  cleanCurseWords(sentence) {
+    let cleaned = sentence;
+
+    if (cursing.isProfane(sentence)) cleaned = cursing.clean(sentence);
+
+    return cleaned;
   }
 }
 
