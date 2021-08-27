@@ -248,4 +248,56 @@ suite("Unit Tests", () => {
       );
     });
   });
+
+  suite("Highlighting Translations Tests", () => {
+    test("1)   Mangoes are my favorite fruit.", () => {
+      let highlighted = Translator.prototype.highlighter(
+        "Mangoes are my favorite fruit.",
+        "british-to-american"
+      );
+
+      assert.isArray(highlighted, "an array should have been returned");
+      assert.isTrue(
+        highlighted.length === 1,
+        `the array returned should have a length of 1, not ${highlighted.length}`
+      );
+    });
+
+    test("2)   I ate yogurt for breakfast.", () => {
+      let highlighted = Translator.prototype.highlighter(
+        "I ate yogurt for breakfast.",
+        "british-to-american"
+      );
+
+      assert.isArray(highlighted, "an array should have been returned");
+      assert.isTrue(
+        highlighted.length === 1,
+        `the array returned should have a length of 1, not ${highlighted.length}`
+      );
+    });
+
+    test("3)   We watched the footie match for a while.", () => {
+      let highlighted = Translator.prototype.highlighter(
+        "We watched the footie match for a while."
+      );
+
+      assert.isArray(highlighted, "an array should have been returned");
+      assert.isTrue(
+        highlighted.length === 1,
+        `the array returned should have a length of 1, not ${highlighted.length}`
+      );
+    });
+
+    test("4)   Paracetamol takes up to an hour to work.", () => {
+      let highlighted = Translator.prototype.highlighter(
+        "Paracetamol takes up to an hour to work."
+      );
+
+      assert.isArray(highlighted, "an array should have been returned");
+      assert.isTrue(
+        highlighted.length === 1,
+        `the array returned should have a length of 1, not ${highlighted.length}`
+      );
+    });
+  });
 });
