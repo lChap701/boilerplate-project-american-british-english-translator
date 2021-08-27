@@ -28,30 +28,17 @@ class Translator {
     for (const [key, word] of Object.entries(americanOnly)) {
       let regex = new RegExp(key, "g");
 
-      if (key.includes(" ")) {
-        if (british.toLowerCase().match(regex)) {
-          let match = british.match(new RegExp(key, "gi"))[0];
+      if (british.toLowerCase().match(regex)) {
+        let match = british.match(new RegExp(key, "gi"))[0];
 
-          if (this.isCapitalized(match)) {
-            let old = key[0].toUpperCase() + key.slice(1);
-            let ne = word[0].toUpperCase() + word.slice(1);
-            british = british.replace(new RegExp(old, "g"), ne);
-          } else {
-            british = british.replace(regex, word);
-          }
-        }
-      } else {
-        let words = british.split(/\W/);
-        let index = british.toLowerCase().split(/\W/).indexOf(key);
+        if (!key.includes(" ") && !key.includes("-")) {
+          let res = british.split(/\W/).filter((b) => b == match);
 
-        if (index > -1) {
-          if (this.isCapitalized(words[index])) {
-            let old = key[0].toUpperCase() + key.slice(1);
-            let ne = word[0].toUpperCase() + word.slice(1);
-            british = british.replace(new RegExp(old, "g"), ne);
-          } else {
-            british = british.replace(new RegExp(key, "g"), word);
+          if (res.length == 1) {
+            british = this.checkCasing(british, res[0], key, word);
           }
+        } else {
+          british = this.checkCasing(british, match, key, word);
         }
       }
     }
@@ -62,13 +49,7 @@ class Translator {
       let index = british.toLowerCase().split(/\W/).indexOf(key);
 
       if (index > -1) {
-        if (this.isCapitalized(words[index])) {
-          let old = key[0].toUpperCase() + key.slice(1);
-          let ne = word[0].toUpperCase() + word.slice(1);
-          british = british.replace(new RegExp(old, "g"), ne);
-        } else {
-          british = british.replace(new RegExp(key, "g"), word);
-        }
+        british = this.checkCasing(british, words[index], key, word);
       }
     }
 
@@ -78,13 +59,7 @@ class Translator {
       let index = british.toLowerCase().split(/\s/).indexOf(key);
 
       if (index > -1) {
-        if (this.isCapitalized(words[index])) {
-          let old = key[0].toUpperCase() + key.slice(1);
-          let ne = word[0].toUpperCase() + word.slice(1);
-          british = british.replace(new RegExp(old, "g"), ne);
-        } else {
-          british = british.replace(new RegExp(key, "g"), word);
-        }
+        british = this.checkCasing(british, words[index], key, word);
       }
     }
 
@@ -101,43 +76,36 @@ class Translator {
    */
   inAmerican(sentence) {
     let american = sentence;
-    let matches = [];
+    let translations = [];
 
     if (american.match(/\d+\.\d+/)) american = american.replace(/\./g, ":");
 
     // Translates American English only words
     for (const [key, word] of Object.entries(britishOnly)) {
       let regex = new RegExp(key, "g");
+      /* let cnt = this.duplicateValueCheck(word, britishOnly);
 
-      if (key.includes(" ") || word.includes("-")) {
-        if (matches.length == 0 || matches[0] !== word) {
-          if (american.toLowerCase().match(regex)) {
-            let match = american.match(new RegExp(key, "gi"))[0];
+      if (cnt > 1) {
+        console.log(word + ": " + cnt);
+      } */
 
-            if (this.isCapitalized(match)) {
-              let old = key[0].toUpperCase() + key.slice(1);
-              let ne = word[0].toUpperCase() + word.slice(1);
-              american = american.replace(new RegExp(old, "g"), ne);
-            } else {
-              american = american.replace(regex, word);
-            }
+      if (
+        american.toLowerCase().match(regex) &&
+        this.notTranslated(word, translations)
+      ) {
+        let match = american.match(new RegExp(key, "gi"))[0];
 
-            matches.push(word);
+        if (!key.includes(" ") && !key.includes("-")) {
+          let res = american.split(/\W/).filter((b) => b == match);
+
+          if (res.length == 1) {
+            american = this.checkCasing(american, res[0], key, word);
           }
+        } else {
+          american = this.checkCasing(american, match, key, word);
         }
-      } else {
-        let words = american.split(/\W/);
-        let index = american.toLowerCase().split(/[\W]/).indexOf(key);
 
-        if (index > -1) {
-          if (this.isCapitalized(words[index])) {
-            let old = key[0].toUpperCase() + key.slice(1);
-            let ne = word[0].toUpperCase() + word.slice(1);
-            american = american.replace(new RegExp(old, "g"), ne);
-          } else {
-            american = american.replace(new RegExp(key, "g"), word);
-          }
-        }
+        translations.push(word);
       }
     }
 
@@ -147,13 +115,7 @@ class Translator {
       let index = american.toLowerCase().split(/\W/).indexOf(word);
 
       if (index > -1) {
-        if (this.isCapitalized(words[index])) {
-          let old = word[0].toUpperCase() + word.slice(1);
-          let ne = key[0].toUpperCase() + key.slice(1);
-          american = american.replace(new RegExp(old, "g"), ne);
-        } else {
-          american = american.replace(new RegExp(word, "g"), key);
-        }
+        american = this.checkCasing(american, words[index], word, key);
       }
     }
 
@@ -163,13 +125,7 @@ class Translator {
       let index = american.toLowerCase().split(/\s/).indexOf(word);
 
       if (index > -1) {
-        if (this.isCapitalized(words[index])) {
-          let old = word[0].toUpperCase() + word.slice(1) + " ";
-          let ne = key[0].toUpperCase() + key.slice(1) + " ";
-          american = american.replace(new RegExp(old, "g"), ne);
-        } else {
-          american = american.replace(new RegExp(word + " ", "g"), key + " ");
-        }
+        american = this.checkCasing(american, words[index], word, key);
       }
     }
 
@@ -179,23 +135,52 @@ class Translator {
   }
 
   /**
-   * Checks if a word is capitalized
-   * @param {String} word
+   * Checks if a word has already been translated
+   * @param {String} word           Represents the word to check for
+   * @param {String[]} transWords   Represents the array of translated words
    *
-   * @returns Returns a boolean value to determine if the word should be capitalized
+   * @returns Returns a boolean value to determine if the word has been translated
    */
-  isCapitalized(word) {
-    return word[0] == word[0].toUpperCase();
+  notTranslated(word, transWords) {
+    for (let i = 0; i < transWords.length; i++) {
+      if (transWords[i] == word) return false;
+    }
+
+    return true;
+  }
+
+  duplicateValueCheck(value, obj) {
+    let values = Object.values(obj);
+    let dupsCnt = values.reduce((dups, o2) => {
+      if (value == o2) ++dups;
+      return dups;
+    }, 0);
+    return dupsCnt;
   }
 
   /**
-   * Checks if the words is in all caps
-   * @param {String} word
+   * Checks the casing of a word/phrase to preserve the casing of the sentence with it's replacement
+   * @param {String} sentence       Represents the sentence to update
+   * @param {String} word           Represents the word/phrase to check
+   * @param {String} change         Represents the word to change
+   * @param {String} replacement    Represents the word that will replace the old one
    *
-   * @returns Returns a boolean value to determine if the word is in all caps
+   * @returns Returns a new sentence
    */
-  isAllCaps(word) {
-    return word == word.toUpperCase();
+  checkCasing(sentence, word, change, replacement) {
+    if (word[0] == word[0].toUpperCase()) {
+      let old = change[0].toUpperCase() + change.slice(1);
+      let ne = replacement[0].toUpperCase() + replacement.slice(1);
+      return sentence.replace(new RegExp(old, "g"), ne);
+    }
+
+    if (word == word.toUpperCase()) {
+      let old = change.toUpperCase();
+      let ne = replacement.toUpperCase();
+      return sentence.replace(new RegExp(old, "g"), ne);
+    }
+
+    return sentence.replace(new RegExp(change, "g"), replacement);
   }
 
   /**
