@@ -33,7 +33,6 @@ module.exports = function (app) {
     }
 
     let highlighted = translator.highlighter(translation, locale);
-    console.log(highlighted);
 
     if (highlighted.length > 0) {
       highlighted.forEach((h) => {
