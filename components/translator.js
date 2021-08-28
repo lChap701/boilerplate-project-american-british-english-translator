@@ -5,7 +5,29 @@ const britishOnly = require("./british-only.js");
 
 const badWords = require("bad-words");
 let cursing = new badWords();
-cursing.removeWords("ass", "Nazi", "Nazis", "dick", "fanny");
+cursing.removeWords(
+  "ass",
+  "Nazi",
+  "Nazis",
+  "dick",
+  "fanny",
+  "pussy",
+  "God",
+  "hell"
+);
+
+cursing.addWords(
+  "arsehole",
+  "yiff",
+  "yiffing",
+  "bint",
+  "dickheads",
+  "dickhead",
+  "munter",
+  "pish",
+  "damnit",
+  "dammit"
+);
 
 /**
  * Module that translates American and British words
