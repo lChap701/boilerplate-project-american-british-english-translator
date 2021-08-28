@@ -3,8 +3,8 @@ const americanToBritishSpelling = require("./american-to-british-spelling.js");
 const americanToBritishTitles = require("./american-to-british-titles.js");
 const britishOnly = require("./british-only.js");
 
-const badWords = require("bad-words");
-let cursing = new badWords();
+const BadWords = require("bad-words");
+let cursing = new BadWords();
 cursing.removeWords(
   "ass",
   "Nazi",
