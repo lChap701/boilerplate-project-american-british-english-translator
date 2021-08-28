@@ -31,7 +31,6 @@ module.exports = function (app) {
     } else {
       translation = translator.inAmerican(text.trim());
     }
-    console.log(translation);
 
     let highlighted = translator.highlighter(translation, locale);
     console.log(highlighted);
@@ -41,12 +40,10 @@ module.exports = function (app) {
         let word = h
           .replace('<span class="highlight">', "")
           .replace("</span>", "");
-        console.log("As Text: " + word);
         translation = translation.replace(word, h);
-        console.log("Highlighted: " + translation);
       });
     }
 
-    res.json({ translation: translation });
+    res.json({ translation: translation, text: text });
   });
 };
