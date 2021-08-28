@@ -175,7 +175,7 @@ suite("Functional Tests", () => {
     test("6)  No Translation Test", () => {
       const data = {
         text: "Hello world",
-        locale: "doesn't really matter",
+        locale: "british-to-american",
       };
 
       chai

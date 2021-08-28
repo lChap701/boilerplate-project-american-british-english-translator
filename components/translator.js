@@ -199,56 +199,118 @@ class Translator {
     let transWords = [];
 
     if (type == "british-to-american") {
+      if (words.match(/\d{1,2}:\d{2}/)) {
+        let match = words.match(/\d{1,2}:\d{2}/)[0];
+        transWords.push(match);
+        words.replace(new RegExp(match, "g"), "");
+      }
+
       // Checks for American versions of British only words
       for (const [key] of Object.entries(americanOnly)) {
-        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+        let translation = this.findTranslation(words, key);
+
+        if (translation) {
           transWords.push(key);
-          words = words.replace(new RegExp(key, "g"), "");
+          words = words.replace(new RegExp(key, "gi"), "");
         }
       }
 
       // Checks for American spellings of words
       for (const [key] of Object.entries(americanToBritishSpelling)) {
-        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+        let translation = this.findTranslation(words, key);
+
+        if (translation) {
           transWords.push(key);
-          words = words.replace(new RegExp(key, "g"), "");
+          words = words.replace(new RegExp(key, "gi"), "");
         }
       }
 
       // Checks for American titles
       for (const [key] of Object.entries(americanToBritishTitles)) {
-        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+        let translation = this.findTranslation(words, key);
+
+        if (translation) {
           transWords.push(key);
-          words = words.replace(new RegExp(key, "g"), "");
+          words = words.replace(new RegExp(key, "gi"), "");
         }
       }
     } else {
+      if (words.match(/\d{1,2}\.\d{2}/)) {
+        let match = words.match(/\d{1,2}\.\d{2}/)[0];
+        words.replace(new RegExp(match, "g"), "");
+      }
+
       // Checks for British versions of American only words
       for (const [key] of Object.entries(britishOnly)) {
-        if (words.toLowerCase().indexOf(key.toLowerCase() + " ") > -1) {
+        let translation = this.findTranslation(words, key);
+
+        if (translation) {
           transWords.push(key);
-          words = words.replace(new RegExp(key, "g"), "");
+          words = words.replace(new RegExp(key, "gi"), "");
         }
       }
 
       // Checks for British spellings of words
       for (const [key, word] of Object.entries(americanToBritishSpelling)) {
-        if (words.toLowerCase().indexOf(word.toLowerCase() + " ") > -1) {
+        let translation = this.findTranslation(words, word);
+
+        if (translation) {
           transWords.push(word);
-          words = words.replace(new RegExp(word, "g"), "");
+          words = words.replace(new RegExp(word, "gi"), "");
         }
       }
 
       // Checks for British titles
       for (const [key, word] of Object.entries(americanToBritishTitles)) {
-        if (words.toLowerCase().indexOf(word.toLowerCase() + " ") > -1) {
+        let translation = this.findTranslation(words, word);
+
+        if (translation) {
           transWords.push(word);
-          words = words.replace(new RegExp(word, "g"), "");
+          words = words.replace(new RegExp(word, "gi"), "");
         }
       }
     }
 
     return transWords.map((t) => `<span class="highlight">${t}</span>`);
+  }
+
+  /**
+   * Checks if a translated word is in a sentence
+   * @param {String} words    Represents the sentence
+   * @param {String} word     Represents the translated word
+   *
+   * @returns Returns the translation or null
+   */
+  findTranslation(words, word) {
+    if (words.toLowerCase().match(new RegExp(word, "g"))) {
+      let match = words.match(new RegExp(word, "gi"))[0];
+
+      if (!word.includes(" ") && !word.includes("-")) {
+        let res = words.split(/\W/).filter((w) => w == match);
+        if (res.length == 1) return this.getCase(res[0], word);
+      } else {
+        return this.getCase(match, word);
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Gets the case (upper, lower, capitalized) the translated word should be in
+   * @param {String} word   Represents the word to check the casing of
+   * @param {String} org    The original value to change and/or return
+   *
+   * @returns Returns the translated word with the correct case
+   */
+  getCase(word, org) {
+    if (word == word.toUpperCase()) return org.toUpperCase();
+
+    if (word[0] == word[0].toUpperCase()) {
+      return org[0].toUpperCase() + org.slice(1);
+    }
+
+    return org;
   }
 }
 

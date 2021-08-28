@@ -28,8 +28,11 @@ module.exports = function (app) {
 
     if (locale === "american-to-british") {
       translation = translator.inBritish(text.trim());
-    } else {
+    } else if (locale === "british-to-american") {
       translation = translator.inAmerican(text.trim());
+    } else {
+      res.json({ error: "Invalid value for locale field" });
+      return;
     }
 
     let highlighted = translator.highlighter(translation, locale);
@@ -39,6 +42,7 @@ module.exports = function (app) {
         let word = h
           .replace('<span class="highlight">', "")
           .replace("</span>", "");
+
         translation = translation.replace(word, h);
       });
     }
