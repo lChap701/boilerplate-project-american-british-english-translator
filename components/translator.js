@@ -210,7 +210,7 @@ class Translator {
         let translation = this.findTranslation(words, key);
 
         if (translation) {
-          transWords.push(key);
+          transWords.push(translation);
           words = words.replace(new RegExp(key, "gi"), "");
         }
       }
@@ -220,23 +220,25 @@ class Translator {
         let translation = this.findTranslation(words, key);
 
         if (translation) {
-          transWords.push(key);
+          transWords.push(translation);
           words = words.replace(new RegExp(key, "gi"), "");
         }
       }
 
       // Checks for American titles
       for (const [key] of Object.entries(americanToBritishTitles)) {
-        let translation = this.findTranslation(words, key);
+        let wordsArr = words.split(/\s/);
+        let index = words.toLowerCase().split(/\s/).indexOf(key);
 
-        if (translation) {
-          transWords.push(key);
+        if (index > -1) {
+          transWords.push(this.getCase(wordsArr[index], key));
           words = words.replace(new RegExp(key, "gi"), "");
         }
       }
     } else {
       if (words.match(/\d{1,2}\.\d{2}/)) {
         let match = words.match(/\d{1,2}\.\d{2}/)[0];
+        transWords.push(match);
         words.replace(new RegExp(match, "g"), "");
       }
 
@@ -245,7 +247,7 @@ class Translator {
         let translation = this.findTranslation(words, key);
 
         if (translation) {
-          transWords.push(key);
+          transWords.push(translation);
           words = words.replace(new RegExp(key, "gi"), "");
         }
       }
@@ -255,17 +257,18 @@ class Translator {
         let translation = this.findTranslation(words, word);
 
         if (translation) {
-          transWords.push(word);
+          transWords.push(translation);
           words = words.replace(new RegExp(word, "gi"), "");
         }
       }
 
       // Checks for British titles
       for (const [key, word] of Object.entries(americanToBritishTitles)) {
-        let translation = this.findTranslation(words, word);
+        let wordsArr = words.split(/\s/);
+        let index = words.toLowerCase().split(/\s/).indexOf(word);
 
-        if (translation) {
-          transWords.push(word);
+        if (index > -1) {
+          transWords.push(this.getCase(wordsArr[index], word));
           words = words.replace(new RegExp(word, "gi"), "");
         }
       }
